@@ -14,12 +14,12 @@ import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken }
 import { getFirestore, collection, doc, setDoc, onSnapshot, updateDoc, deleteDoc, getDocs } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBBI_3icsgTRUvDfHPBkcsJdCuy1Z14j2U",
-  authDomain: "vengara-project-tracker.firebaseapp.com",
-  projectId: "vengara-project-tracker",
-  storageBucket: "vengara-project-tracker.firebasestorage.app",
-  messagingSenderId: "840836667022",
-  appId: "1:840836667022:web:448deb7cbce4b1f8721bdf"
+  apiKey: "AIzaSyBc6U5seFvyHU_chuU6ME613TvBy-0MCF8",
+  authDomain: "kgm-project-tracker.firebaseapp.com",
+  projectId: "kgm-project-tracker",
+  storageBucket: "kgm-project-tracker.firebasestorage.app",
+  messagingSenderId: "674416623628",
+  appId: "1:674416623628:web:ea47c369c3cca0adca2e29"
 };
 
 let app, auth, db;
@@ -31,7 +31,7 @@ try {
   console.error("Firebase init failed:", e);
 }
 
-const CANVAS_APP_ID = typeof __app_id !== 'undefined' ? __app_id : 'vengara-tracker-default';
+const CANVAS_APP_ID = typeof __app_id !== 'undefined' ? __app_id : 'kgm-tracker-default';
 
 // --- CLOUDINARY UPLOAD FUNCTION ---
 const uploadToCloudinary = async (fileData, resourceType = 'auto') => {
@@ -63,13 +63,13 @@ const INITIAL_MAIN_FOLDERS = [
 ];
 
 const INITIAL_SUB_FOLDERS = [
-  // Local Bodies (Vengara Constituency)
-  { id: 'vengara', mainFolderId: 'mf_local_bodies', name: 'Vengara', color: 'from-indigo-500 to-purple-600', theme: 'indigo', iconName: 'Building2' },
-  { id: 'abdu_rahiman_nagar', mainFolderId: 'mf_local_bodies', name: 'Abdu Rahiman Nagar', color: 'from-emerald-400 to-green-600', theme: 'emerald', iconName: 'Trees' },
-  { id: 'kannamangalam', mainFolderId: 'mf_local_bodies', name: 'Kannamangalam', color: 'from-blue-400 to-cyan-600', theme: 'blue', iconName: 'MapIcon' },
-  { id: 'oorakam', mainFolderId: 'mf_local_bodies', name: 'Oorakam', color: 'from-amber-400 to-orange-500', theme: 'amber', iconName: 'Tent' },
-  { id: 'parappur', mainFolderId: 'mf_local_bodies', name: 'Parappur', color: 'from-rose-400 to-pink-600', theme: 'rose', iconName: 'Home' },
-  { id: 'othukkungal', mainFolderId: 'mf_local_bodies', name: 'Othukkungal', color: 'from-teal-400 to-emerald-500', theme: 'teal', iconName: 'MapPin' },
+  // Local Bodies (Kunnamangalam Constituency)
+  { id: 'chathamangalam', mainFolderId: 'mf_local_bodies', name: 'Chathamangalam', color: 'from-indigo-500 to-purple-600', theme: 'indigo', iconName: 'Building2' },
+  { id: 'kunnamangalam', mainFolderId: 'mf_local_bodies', name: 'Kunnamangalam', color: 'from-emerald-400 to-green-600', theme: 'emerald', iconName: 'Trees' },
+  { id: 'mavoor', mainFolderId: 'mf_local_bodies', name: 'Mavoor', color: 'from-blue-400 to-cyan-600', theme: 'blue', iconName: 'MapIcon' },
+  { id: 'olavanna', mainFolderId: 'mf_local_bodies', name: 'Olavanna', color: 'from-amber-400 to-orange-500', theme: 'amber', iconName: 'Tent' },
+  { id: 'perumanna', mainFolderId: 'mf_local_bodies', name: 'Perumanna', color: 'from-rose-400 to-pink-600', theme: 'rose', iconName: 'Home' },
+  { id: 'peruvayal', mainFolderId: 'mf_local_bodies', name: 'Peruvayal', color: 'from-teal-400 to-emerald-500', theme: 'teal', iconName: 'MapPin' },
 
   // Departments
   { id: 'pwd_bridges', mainFolderId: 'mf_departments', name: 'PWD Bridges', color: 'from-amber-400 to-orange-500', theme: 'amber', iconName: 'Folder' },
@@ -431,7 +431,7 @@ function LoginScreen({ onLogin, staffUsers, authError, allUpdates }) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const adminUser = { username: 'KM Shaji MLA', role: 'admin', id: 'admin', password: 'Shaji@2026' };
+  const adminUser = { username: 'MA Razak Master MLA', role: 'admin', id: 'admin', password: 'Razak@2026' };
   const allUsers = [adminUser, ...staffUsers];
 
   const lastSeen = parseInt(localStorage.getItem('admin_last_seen_notifications') || '0', 10);
@@ -618,7 +618,7 @@ export default function App() {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
       const downloadAnchorNode = document.createElement('a');
       downloadAnchorNode.setAttribute("href", dataStr);
-      downloadAnchorNode.setAttribute("download", "vengara_tracker_backup.json");
+      downloadAnchorNode.setAttribute("download", "masterplan_tracker_backup.json");
       document.body.appendChild(downloadAnchorNode);
       downloadAnchorNode.click();
       downloadAnchorNode.remove();
@@ -995,7 +995,7 @@ export default function App() {
             )}
             <h1 className="text-lg sm:text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
               <MapIcon className="w-5 h-5 sm:w-7 sm:h-7 text-indigo-600" />
-              {activeMainFolder ? activeMainFolder.name : "Vengara Project Tracker"}
+              {activeMainFolder ? activeMainFolder.name : "Masterplan Tracker"}
               {!activeMainFolder && (
                 <>
                   <span className="ml-1 sm:ml-2 text-[10px] sm:text-xs font-bold bg-indigo-100 text-indigo-800 px-2 sm:px-3 py-1 rounded-full flex items-center gap-1">
