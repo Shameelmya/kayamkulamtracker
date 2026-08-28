@@ -994,7 +994,7 @@ export default function App() {
               </button>
             )}
             <h1 className="text-lg sm:text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-              <MapIcon className="w-5 h-5 sm:w-7 sm:h-7 text-indigo-600" />
+              <img src="/favicon.png" alt="Logo" className="w-6 h-6 sm:w-8 sm:h-8 object-contain" />
               {activeMainFolder ? activeMainFolder.name : "Masterplan Tracker"}
               {!activeMainFolder && (
                 <>
