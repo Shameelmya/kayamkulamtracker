@@ -14,12 +14,12 @@ import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken }
 import { getFirestore, collection, doc, setDoc, onSnapshot, updateDoc, deleteDoc, getDocs } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBc6U5seFvyHU_chuU6ME613TvBy-0MCF8",
-  authDomain: "kgm-project-tracker.firebaseapp.com",
-  projectId: "kgm-project-tracker",
-  storageBucket: "kgm-project-tracker.firebasestorage.app",
-  messagingSenderId: "674416623628",
-  appId: "1:674416623628:web:ea47c369c3cca0adca2e29"
+  apiKey: "AIzaSyDGFMuQRGrLvoin-U2To6-dsBueBx2Rk8s",
+  authDomain: "m-liju-kayamkulam-tracker.firebaseapp.com",
+  projectId: "m-liju-kayamkulam-tracker",
+  storageBucket: "m-liju-kayamkulam-tracker.firebasestorage.app",
+  messagingSenderId: "567303642128",
+  appId: "1:567303642128:web:a848bfa12b07e823dc3e95"
 };
 
 let app, auth, db;
@@ -63,13 +63,14 @@ const INITIAL_MAIN_FOLDERS = [
 ];
 
 const INITIAL_SUB_FOLDERS = [
-  // Local Bodies (Kunnamangalam Constituency)
-  { id: 'chathamangalam', mainFolderId: 'mf_local_bodies', name: 'Chathamangalam', color: 'from-indigo-500 to-purple-600', theme: 'indigo', iconName: 'Building2' },
-  { id: 'kunnamangalam', mainFolderId: 'mf_local_bodies', name: 'Kunnamangalam', color: 'from-emerald-400 to-green-600', theme: 'emerald', iconName: 'Trees' },
-  { id: 'mavoor', mainFolderId: 'mf_local_bodies', name: 'Mavoor', color: 'from-blue-400 to-cyan-600', theme: 'blue', iconName: 'MapIcon' },
-  { id: 'olavanna', mainFolderId: 'mf_local_bodies', name: 'Olavanna', color: 'from-amber-400 to-orange-500', theme: 'amber', iconName: 'Tent' },
-  { id: 'perumanna', mainFolderId: 'mf_local_bodies', name: 'Perumanna', color: 'from-rose-400 to-pink-600', theme: 'rose', iconName: 'Home' },
-  { id: 'peruvayal', mainFolderId: 'mf_local_bodies', name: 'Peruvayal', color: 'from-teal-400 to-emerald-500', theme: 'teal', iconName: 'MapPin' },
+  // Local Bodies (Kayamkulam Constituency)
+  { id: 'kayamkulam_municipality', mainFolderId: 'mf_local_bodies', name: 'Kayamkulam Municipality', color: 'from-indigo-500 to-purple-600', theme: 'indigo', iconName: 'Building2' },
+  { id: 'krishnapuram', mainFolderId: 'mf_local_bodies', name: 'Krishnapuram', color: 'from-emerald-400 to-green-600', theme: 'emerald', iconName: 'Trees' },
+  { id: 'devikulangara', mainFolderId: 'mf_local_bodies', name: 'Devikulangara', color: 'from-blue-400 to-cyan-600', theme: 'blue', iconName: 'MapIcon' },
+  { id: 'kandalloor', mainFolderId: 'mf_local_bodies', name: 'Kandalloor', color: 'from-amber-400 to-orange-500', theme: 'amber', iconName: 'Tent' },
+  { id: 'pathiyoor', mainFolderId: 'mf_local_bodies', name: 'Pathiyoor', color: 'from-rose-400 to-pink-600', theme: 'rose', iconName: 'Home' },
+  { id: 'chettikulangara', mainFolderId: 'mf_local_bodies', name: 'Chettikulangara', color: 'from-teal-400 to-emerald-500', theme: 'teal', iconName: 'MapPin' },
+  { id: 'bharanikkavu', mainFolderId: 'mf_local_bodies', name: 'Bharanikkavu', color: 'from-violet-500 to-fuchsia-600', theme: 'fuchsia', iconName: 'Tent' },
 
   // Departments
   { id: 'pwd_bridges', mainFolderId: 'mf_departments', name: 'PWD Bridges', color: 'from-amber-400 to-orange-500', theme: 'amber', iconName: 'Folder' },
@@ -431,7 +432,7 @@ function LoginScreen({ onLogin, staffUsers, authError, allUpdates }) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const adminUser = { username: 'MA Razak Master MLA', role: 'admin', id: 'admin', password: 'Razak@2026' };
+  const adminUser = { username: 'Adv M Liju MLA (Hon. Excise and Cooperation Minister, Kerala)', role: 'admin', id: 'admin', password: 'Liju@2026' };
   const allUsers = [adminUser, ...staffUsers];
 
   const lastSeen = parseInt(localStorage.getItem('admin_last_seen_notifications') || '0', 10);
@@ -467,7 +468,7 @@ function LoginScreen({ onLogin, staffUsers, authError, allUpdates }) {
         <div className="flex flex-col items-center justify-center mb-8">
           <img src="/banner.png" alt="Banner" className="w-full max-w-sm h-auto object-contain rounded-lg shadow-sm mb-4 bg-slate-900" />
           <h1 className="text-2xl font-bold text-center text-slate-800">
-            Masterplan Tracker
+            KayamKulam Project Tracker
           </h1>
           {selectedUser && (
             <p className="text-center text-slate-500 mt-2 text-sm">
@@ -995,7 +996,7 @@ export default function App() {
             )}
             <h1 className="text-lg sm:text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
               <img src="/favicon.png" alt="Logo" className="w-6 h-6 sm:w-8 sm:h-8 object-contain" />
-              {activeMainFolder ? activeMainFolder.name : "Masterplan Tracker"}
+              {activeMainFolder ? activeMainFolder.name : "KayamKulam Project Tracker"}
               {!activeMainFolder && (
                 <>
                   <span className="ml-1 sm:ml-2 text-[10px] sm:text-xs font-bold bg-indigo-100 text-indigo-800 px-2 sm:px-3 py-1 rounded-full flex items-center gap-1">
