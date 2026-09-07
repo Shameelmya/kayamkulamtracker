@@ -12,6 +12,7 @@ import html2pdf from 'html2pdf.js';
 import { initializeApp } from "firebase/app";
 import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "firebase/auth";
 import { getFirestore, collection, doc, setDoc, onSnapshot, updateDoc, deleteDoc, getDocs } from "firebase/firestore";
+import { getStorage, ref, uploadString, getDownloadURL } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDGFMuQRGrLvoin-U2To6-dsBueBx2Rk8s",
@@ -22,30 +23,27 @@ const firebaseConfig = {
   appId: "1:567303642128:web:a848bfa12b07e823dc3e95"
 };
 
-let app, auth, db;
+let app, auth, db, storage;
 try {
   app = initializeApp(firebaseConfig);
   auth = getAuth(app);
   db = getFirestore(app);
+  storage = getStorage(app);
 } catch (e) {
   console.error("Firebase init failed:", e);
 }
 
 const CANVAS_APP_ID = typeof __app_id !== 'undefined' ? __app_id : 'kayamkulam-tracker-default';
 
-// --- CLOUDINARY UPLOAD FUNCTION ---
-const uploadToCloudinary = async (fileData, resourceType = 'auto') => {
-  const cloudName = 'davoje7p5'; 
-  const uploadPreset = 'kayamkulam_preset'; 
-  const url = `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`;
-  const formData = new FormData();
-  formData.append('file', fileData);
-  formData.append('upload_preset', uploadPreset);
-
-  const response = await fetch(url, { method: 'POST', body: formData });
-  if (!response.ok) throw new Error('Upload to Cloudinary failed');
-  const data = await response.json();
-  return data.secure_url; 
+// --- FIREBASE STORAGE UPLOAD FUNCTION ---
+const uploadToFirebaseStorage = async (fileData, resourceType = 'auto') => {
+  if (!storage) throw new Error("Firebase Storage not initialized");
+  const ext = resourceType === 'raw' ? 'pdf' : 'jpg';
+  const fileName = `uploads/${Date.now()}_${Math.random().toString(36).substring(2, 9)}.${ext}`;
+  const storageRef = ref(storage, fileName);
+  await uploadString(storageRef, fileData, 'data_url');
+  const url = await getDownloadURL(storageRef);
+  return url;
 };
 
 const ICON_MAP = {
@@ -1885,7 +1883,7 @@ function ProjectAccordion({ project, theme, index, user, authError, db, allSubFo
       if (user && !authError) {
         if (attachments.length > 0) {
           finalAttachments = await Promise.all(attachments.map(att => 
-            uploadToCloudinary(att.data, att.type === 'pdf' ? 'raw' : 'image').then(url => ({ type: att.type, url, name: att.name }))
+            uploadToFirebaseStorage(att.data, att.type === 'pdf' ? 'raw' : 'image').then(url => ({ type: att.type, url, name: att.name }))
             .catch(() => ({ type: att.type, url: att.data, name: att.name }))
           ));
         }
@@ -1945,7 +1943,7 @@ function ProjectAccordion({ project, theme, index, user, authError, db, allSubFo
           if (editAttachments.length > 0) {
             finalAttachments = await Promise.all(editAttachments.map(att => {
               if (att.isExisting) return Promise.resolve({ type: att.type, url: att.url, name: att.name });
-              return uploadToCloudinary(att.data, att.type === 'pdf' ? 'raw' : 'image').then(url => ({ type: att.type, url, name: att.name })).catch(() => ({ type: att.type, url: att.data, name: att.name }));
+              return uploadToFirebaseStorage(att.data, att.type === 'pdf' ? 'raw' : 'image').then(url => ({ type: att.type, url, name: att.name })).catch(() => ({ type: att.type, url: att.data, name: att.name }));
             }));
           }
           const newUpdate = { id: updateId, projectId: project.id, text: editUpdateText, attachments: finalAttachments, timestamp: missedEntry ? missedEntry.timestamp : new Date().toISOString(), isWeeklyUpdate: true, createdAt: new Date().toISOString() };
@@ -1964,7 +1962,7 @@ function ProjectAccordion({ project, theme, index, user, authError, db, allSubFo
       if (user && !authError) {
         finalAttachments = await Promise.all(editAttachments.map(att => {
           if (att.isExisting) return Promise.resolve({ type: att.type, url: att.url, name: att.name });
-          return uploadToCloudinary(att.data, att.type === 'pdf' ? 'raw' : 'image').then(url => ({ type: att.type, url, name: att.name })).catch(() => ({ type: att.type, url: att.data, name: att.name }));
+          return uploadToFirebaseStorage(att.data, att.type === 'pdf' ? 'raw' : 'image').then(url => ({ type: att.type, url, name: att.name })).catch(() => ({ type: att.type, url: att.data, name: att.name }));
         }));
         await updateDoc(doc(db, 'artifacts', CANVAS_APP_ID, 'public', 'data', 'project_updates', editingUpdateId), { text: editUpdateText, attachments: finalAttachments, images: [] });
       } else {
