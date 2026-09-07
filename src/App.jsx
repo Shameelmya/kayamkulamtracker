@@ -432,7 +432,7 @@ function LoginScreen({ onLogin, staffUsers, authError, allUpdates }) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const adminUser = { username: 'Adv M Liju MLA (Hon. Excise and Cooperation Minister, Kerala)', role: 'admin', id: 'admin', password: 'Liju@2026' };
+  const adminUser = { username: 'Adv M Liju', role: 'admin', id: 'admin', password: 'Liju@2026' };
   const allUsers = [adminUser, ...staffUsers];
 
   const lastSeen = parseInt(localStorage.getItem('admin_last_seen_notifications') || '0', 10);
