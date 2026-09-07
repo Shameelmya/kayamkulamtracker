@@ -1281,6 +1281,30 @@ export default function App() {
           </div>
         </div>
       )}
+      {isTodaysReviewsOpen && (
+        <TodaysReviewsModal
+          allProjects={allProjects}
+          allSubFolders={allSubFolders}
+          displayMainFolders={displayMainFolders}
+          searchQuery={todaysReviewsSearch}
+          setSearchQuery={setTodaysReviewsSearch}
+          onClose={() => setIsTodaysReviewsOpen(false)}
+          onProjectSelect={(proj) => {
+            if (proj && proj.localBodyIds && proj.localBodyIds.length > 0) {
+              const subFolder = allSubFolders.find(sf => sf.id === proj.localBodyIds[0]);
+              if (subFolder) {
+                const mainFolder = displayMainFolders.find(mf => mf.id === subFolder.mainFolderId);
+                if (mainFolder) {
+                  setActiveMainFolder(mainFolder);
+                  setActiveSubFolder(subFolder);
+                  setExpandedProjectId(proj.id);
+                  setIsTodaysReviewsOpen(false);
+                }
+              }
+            }
+          }}
+        />
+      )}
 
       {/* Project Modal (When Sub-folder is opened) */}
       {activeSubFolder && (
