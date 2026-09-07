@@ -31,12 +31,12 @@ try {
   console.error("Firebase init failed:", e);
 }
 
-const CANVAS_APP_ID = typeof __app_id !== 'undefined' ? __app_id : 'kgm-tracker-default';
+const CANVAS_APP_ID = typeof __app_id !== 'undefined' ? __app_id : 'kayamkulam-tracker-default';
 
 // --- CLOUDINARY UPLOAD FUNCTION ---
 const uploadToCloudinary = async (fileData, resourceType = 'auto') => {
   const cloudName = 'davoje7p5'; 
-  const uploadPreset = 'tanur_preset'; 
+  const uploadPreset = 'kayamkulam_preset'; 
   const url = `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`;
   const formData = new FormData();
   formData.append('file', fileData);
@@ -619,7 +619,7 @@ export default function App() {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
       const downloadAnchorNode = document.createElement('a');
       downloadAnchorNode.setAttribute("href", dataStr);
-      downloadAnchorNode.setAttribute("download", "masterplan_tracker_backup.json");
+      downloadAnchorNode.setAttribute("download", "kayamkulam_tracker_backup.json");
       document.body.appendChild(downloadAnchorNode);
       downloadAnchorNode.click();
       downloadAnchorNode.remove();
